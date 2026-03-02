@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Groq } from "groq-sdk";
@@ -193,26 +192,28 @@ app.get("/api/leads", async (req, res) => {
   }
 });
 
-// --- Vite Middleware ---
-async function startServer() {
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    app.use(express.static(path.join(__dirname, "dist")));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "dist", "index.html"));
-    });
-  }
+// --- Vite Middleware & Static Assets ---
+if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+  app.use(express.static(path.join(__dirname, "dist")));
+  app.get("*", (req, res) => {
+    if (req.path.startsWith('/api')) return;
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
+  });
+} else {
+  // Only use Vite in local development
+  const { createServer: createViteServer } = await import("vite");
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+    appType: "spa",
+  });
+  app.use(vite.middlewares);
+}
 
+// Only listen if not on Vercel
+if (!process.env.VERCEL) {
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
-
-startServer();
 
 export default app;
