@@ -8,7 +8,7 @@ import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 
 dotenv.config();
-console.log("Checking Groq Key:", process.env.GROQ_API_KEY ? "Key Found" : "Key NOT Found");
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -214,3 +214,5 @@ async function startServer() {
 }
 
 startServer();
+
+export default app;
