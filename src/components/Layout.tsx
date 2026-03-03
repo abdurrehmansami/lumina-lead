@@ -79,16 +79,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             <div className="h-6 w-px bg-slate-200 dark:bg-slate-800" />
 
-            <button
+            {/* <button
               onClick={() => {
                 setIsDark(!isDark);
-                // toast.success(`Switched to ${!isDark ? 'dark' : 'light'} mode`);
+                
               }}
               className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-all hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
               aria-label="Toggle theme"
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            </button> */}
+
           </div>
         </div>
       </nav>
